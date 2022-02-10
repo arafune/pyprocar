@@ -38,8 +38,8 @@ pyprocar.bandsplot(
 )
 
 
-procar_file = "/Users/uthpala/project-data/PyProcar/fermi-surface/abinit/MgB2-G-centered-shifted/PROCAR"
-abinit_file = "/Users/uthpala/project-data/PyProcar/fermi-surface/abinit/MgB2-G-centered-shifted/abinit.out"
+procar_file = "/Volumes/Google Drive/My Drive/research/Projects/PyProcar/fermi-surface/abinit/MgB2/MgB2-G-centered-shifted-occopt-corrected/PROCAR"
+abinit_file = "/Volumes/Google Drive/My Drive/research/Projects/PyProcar/fermi-surface/abinit/MgB2/MgB2-G-centered-shifted-occopt-corrected/abinit.out"
 
 abinit_object = AbinitParser(abinit_output=abinit_file)
 recLat = abinit_object.reclat
@@ -58,8 +58,8 @@ pyprocar.fermi3D(
 )
 
 # VASP
-procar_file = "/Users/uthpala/project-data/PyProcar/fermi-surface/vasp/MgB2/PROCAR"
-outcar = "/Users/uthpala/project-data/PyProcar/fermi-surface/vasp/MgB2/OUTCAR"
+procar_file = "/Volumes/Google Drive/My Drive/research/Projects/PyProcar/fermi-surface/vasp/MgB2/PROCAR"
+outcar = "/Volumes/Google Drive/My Drive/research/Projects/PyProcar/fermi-surface/vasp/MgB2/OUTCAR"
 
 procarFile = ProcarParser()
 procarFile.readFile(procar_file)

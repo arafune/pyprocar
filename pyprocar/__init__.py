@@ -26,7 +26,6 @@ from .version import date as __date__
 import logging
 import re
 import sys
-import os
 
 # import ase
 import matplotlib.pyplot as plt
@@ -84,16 +83,11 @@ from .scriptKmesh2D import generate2dkmesh
 from .scriptKpath import kpath
 from .scriptRepair import repair
 from .scriptUnfold import unfold
-from .scriptUnfold_old import unfold as unfold_old
-from .scriptUnfold_new import unfold as unfold_new
 from .scriptVector import Vector
-from .scriptBandGap import bandgap
+# from .scriptBandGap import bandgap
 from .splash import welcome
 
 from . import io
 from . import core
 from . import utils
 from . import plotter
-from .utils.defaults import Settings
-
-
