@@ -28,31 +28,31 @@ plt.rc("ytick", labelsize=22)  # fontsize of the tick labels
 
 
 def dosplot(
-        filename="vasprun.xml",
-        mode="plain",
-        interpolation_factor=None,
-        orientation="horizontal",
-        spin_colors=None,
-        colors=None,
-        spins=None,
-        atoms=None,
-        orbitals=None,
-        elimit=None,
-        dos_limit=None,
-        cmap="jet",
-        linewidth=1,
-        vmax=None,
-        vmin=None,
-        grid=False,
-        savefig=None,
-        title=None,
-        plot_total=True,
-        code="vasp",
-        labels=None,
-        items={},
-        ax=None,
-        plt_show=True,
-        verbose=True,
+    filename="vasprun.xml",
+    mode="plain",
+    interpolation_factor=None,
+    orientation="horizontal",
+    spin_colors=None,
+    colors=None,
+    spins=None,
+    atoms=None,
+    orbitals=None,
+    elimit=None,
+    dos_limit=None,
+    cmap="jet",
+    linewidth=1,
+    vmax=None,
+    vmin=None,
+    grid=False,
+    savefig=None,
+    title=None,
+    plot_total=True,
+    code="vasp",
+    labels=None,
+    items={},
+    ax=None,
+    plt_show=True,
+    verbose=True,
 ):
     """
     This function plots the density of states in different formats
@@ -323,8 +323,12 @@ def dosplot(
     """
 
     if mode not in [
-            'plain', 'parametric_line', 'parametric', 'stack_species',
-            'stack_orbitals', 'stack'
+        "plain",
+        "parametric_line",
+        "parametric",
+        "stack_species",
+        "stack_orbitals",
+        "stack",
     ]:
         raise ValueError(
             "Mode should be choosed from ['plain', 'parametric_line','parametric','stack_species','stack_orbitals','stack']"
@@ -351,52 +355,52 @@ def dosplot(
     total = plot_total
     code = code.lower()
 
-    if orientation[0].lower() == 'h':
-        orientation = 'horizontal'
-    elif orientation[0].lower() == 'v':
-        orientation = 'vertical'
+    if orientation[0].lower() == "h":
+        orientation = "horizontal"
+    elif orientation[0].lower() == "v":
+        orientation = "vertical"
 
     if code == "vasp":
-        vaspxml = VaspXML(filename=filename,
-                          dos_interpolation_factor=interpolation_factor)
+        vaspxml = VaspXML(
+            filename=filename, dos_interpolation_factor=interpolation_factor
+        )
         dos_plot = DosPlot(dos=vaspxml.dos, structure=vaspxml.structure)
         if atoms is None:
             atoms = list(np.arange(vaspxml.structure.natoms, dtype=int))
         if spins is None:
             spins = list(np.arange(len(vaspxml.dos.total)))
         if orbitals is None:
-            orbitals = list(
-                np.arange(len(vaspxml.dos.projected[0][0]), dtype=int))
+            orbitals = list(np.arange(len(vaspxml.dos.projected[0][0]), dtype=int))
         if elimit is None:
             elimit = [vaspxml.dos.energies.min(), vaspxml.dos.energies.max()]
     elif code == "lobster":
         vaspxml = LobsterDOSParser(
-            filename="DOSCAR.lobster",
-            dos_interpolation_factor=interpolation_factor)
+            filename="DOSCAR.lobster", dos_interpolation_factor=interpolation_factor
+        )
         dos_plot = DosPlot(dos=vaspxml.dos, structure=vaspxml.structure)
         if atoms is None:
             atoms = list(np.arange(vaspxml.structure.natoms, dtype=int))
         if spins is None:
             spins = list(np.arange(len(vaspxml.dos.total)))
         if orbitals is None:
-            orbitals = list(
-                np.arange(len(vaspxml.dos.projected[0][0]), dtype=int))
+            orbitals = list(np.arange(len(vaspxml.dos.projected[0][0]), dtype=int))
         if elimit is None:
             elimit = [vaspxml.dos.energies.min(), vaspxml.dos.energies.max()]
 
     elif code == "qe":
-        vaspxml = QEDOSParser(nscfin="nscf.in",
-                              pdosin="pdos.in",
-                              scfOut="scf.out",
-                              dos_interpolation_factor=interpolation_factor)
+        vaspxml = QEDOSParser(
+            nscfin="nscf.in",
+            pdosin="pdos.in",
+            scfOut="scf.out",
+            dos_interpolation_factor=interpolation_factor,
+        )
         dos_plot = DosPlot(dos=vaspxml.dos, structure=vaspxml.structure)
         if atoms is None:
             atoms = list(np.arange(vaspxml.structure.natoms, dtype=int))
         if spins is None:
             spins = list(np.arange(len(vaspxml.dos.total)))
         if orbitals is None:
-            orbitals = list(
-                np.arange(len(vaspxml.dos.projected[0][0]), dtype=int))
+            orbitals = list(np.arange(len(vaspxml.dos.projected[0][0]), dtype=int))
         if elimit is None:
             elimit = [vaspxml.dos.energies.min(), vaspxml.dos.energies.max()]
 
@@ -430,7 +434,6 @@ def dosplot(
                 ax=ax,
                 orientation=orientation,
                 linewidth=linewidth,
-
             )
             _, ax1 = dos_plot.plot_parametric_line(
                 atoms=atoms,
@@ -587,7 +590,7 @@ def dosplot(
         if len(spins) > 1:
             ylim = [
                 vaspxml.dos.total[1, cond].max() * -1.1,
-                vaspxml.dos.total[0, cond].max() * 1.1
+                vaspxml.dos.total[0, cond].max() * 1.1,
             ]
         else:
             ylim = [0, vaspxml.dos.total[spins[0], cond].max() * 1.1]
@@ -618,11 +621,13 @@ def dosplot(
     if savefig:
 
         fig.savefig(savefig, bbox_inches="tight")
-        plt.close(
-        )  # Added by Nicholas Pike to close memory issue of looping and creating many figures
+        plt.close()  # Added by Nicholas Pike to close memory issue of looping and creating many figures
         return None, None
     else:
-        plt.show(block=plt_show)
+        if plt_show:
+            plt.show()
+        else:
+            pass
 
     return fig, ax1
 

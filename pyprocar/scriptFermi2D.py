@@ -5,13 +5,14 @@ from .procarplot import ProcarPlot
 from .procarsymmetry import ProcarSymmetry
 from .fermisurface import FermiSurface
 from .elkparser import ElkParser
+from .qeparser import QEParser
 from .abinitparser import AbinitParser
 import matplotlib.pyplot as plt
 from .splash import welcome
 
 
 def fermi2D(
-    file,
+    file=None,
     outcar=None,
     abinit_output=None,
     spin=0,
@@ -33,8 +34,8 @@ def fermi2D(
     repair=True,
 ):
     """
-  This module plots 2D Fermi surface.
-  """
+    This module plots 2D Fermi surface.
+    """
 
     welcome()
 
@@ -91,7 +92,9 @@ def fermi2D(
             rec_basis = outcarparser.RecLatOutcar(outcar)
         # Reciprocal lattices are needed!
         elif rec_basis is None and outcar is None:
-            print("ERROR: Reciprocal Lattice is needed, use --rec_basis or --outcar")
+            print(
+                "ERROR: Reciprocal Lattice is needed! Provide rec_basis or OUTCAR file."
+            )
             raise RuntimeError("Reciprocal Lattice not found")
 
         # parsing the file
@@ -100,17 +103,24 @@ def fermi2D(
         procarFile.readFile(file, permissive=False, recLattice=rec_basis)
 
     elif code == "elk":
-        procarFile = ElkParser()
-        if rec_basis is None:
-            if fermi is None:
-                fermi = procarFile.fermi
-                print("Fermi energy found in Elk output file = " + str(fermi))
-            rec_basis = procarFile.reclat
-        # Reciprocal lattices are needed!
-        if rec_basis is None:
-            print("ERROR: Reciprocal Lattice is needed, use --rec_basis or --outcar")
+        # Reciprocal lattice is obtained from output file
+        procarFile = ElkParser(kdirect=False)
+        if fermi is None:
+            fermi = procarFile.fermi
+            print("Fermi energy found in Elk output file = " + str(fermi))
+        if procarFile.reclat is None:
+            print("ERROR: Reciprocal Lattice is needed! Check if output file has it.")
             raise RuntimeError("Reciprocal Lattice not found")
-        procarFile = Elkparser(kdirect=False)
+
+    elif code == "qe":
+        # Reciprocal lattice is obtained from output file
+        procarFile = QEParser(kdirect=False)
+        if fermi is None:
+            fermi = procarFile.fermi
+            print("Fermi energy found in QE output file = " + str(fermi))
+        if procarFile.reclat is None:
+            print("ERROR: Reciprocal Lattice is needed! Check if output file has it.")
+            raise RuntimeError("Reciprocal Lattice not found")
 
     elif code == "abinit":
         if rec_basis is None and abinit_output:
@@ -121,7 +131,9 @@ def fermi2D(
             rec_basis = abinitparser.reclat
         # Reciprocal lattices are needed!
         elif rec_basis is None and abinit_output is None:
-            print("ERROR: Reciprocal Lattice is needed, use --rec_basis or --outcar")
+            print(
+                "ERROR: Reciprocal Lattice is needed! Provide rec_basis or output file."
+            )
             raise RuntimeError("Reciprocal Lattice not found")
         # parsing the file
         procarFile = ProcarParser()
